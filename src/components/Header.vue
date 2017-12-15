@@ -23,21 +23,11 @@
  import moment from 'moment';
  import numeral from 'numeral';
 
-export default {
-  name: 'Header',
-  props: ['headerData'],
-  filters: {
-    'fromNow'(val) {
-      return moment.unix(val).fromNow();
-    },
-    'formatPrice'(val) {
-      return numeral(val).format('$0,0');
-    },
-    'formatPercentage'(val) {
-      return val === undefined ? '0%' : val;
-    }
+  export default {
+    name: 'Header',
+    props: ['headerData'],
+
   }
-}
 </script>
 
 <style scoped>

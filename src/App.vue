@@ -1,17 +1,20 @@
 <template>
   <div class="app">
     <app-header :headerData="headerData"></app-header>
+    <app-table :tickerData="tickerData"></app-table>
   </div>
 </template>
 
 <script>
   import axios from 'axios';
   import Header from '@/components/Header';
+  import Table from '@/components/Table';
 
 export default {
   name: 'app',
   components: {
-    'app-header': Header
+    'app-header': Header,
+    'app-table': Table
   },
   data() {
     return {
