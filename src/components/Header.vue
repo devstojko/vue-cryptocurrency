@@ -28,6 +28,20 @@ export default {
   .header {
     max-width: 90%;
     margin: 0 auto;
+    padding: 20px 40px;
+    background-color: lightslategrey;
   }
+
+  .stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+
 </style>
 
