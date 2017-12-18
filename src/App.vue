@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <app-header :headerData="headerData"></app-header>
-    <app-table :tickerData="tickerData"></app-table>
+    <app-table :data="tickerData" :columns="tableColumns"></app-table>
   </div>
 </template>
 
@@ -19,7 +19,16 @@ export default {
   data() {
     return {
       headerData: {},
-      tickerData: []
+      tickerData: [],
+      tableColumns: [
+        "rank",
+        "name",
+        "price_usd",
+        "percent_change_24h",
+        "market_cap_usd",
+        "24h_volume_usd",
+        "available_supply"
+      ]
     }
   },
   computed: {

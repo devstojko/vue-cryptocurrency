@@ -2,37 +2,72 @@
   <div class="table">
     <thead>
       <tr>
-        <th>#</th>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Change</th>
-        <th>Market Cap</th>
-        <th>Volume (24h)</th>
-        <th>Circulating Supply</th>
+        <th v-for="column in columns" :key="column.id" @click="sortBy(column)">
+          {{ column | capitalize | trimUnderscore }}
+        </th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="ticker in tickerData" :key="ticker.id">
-        <td v-text="ticker.rank"></td>
-        <td>
-          <span>{{ ticker.symbol }}</span>
-          <p>{{ ticker.name }}</p>
+      <tr v-for="entry in sortedData" :key="entry.id">
+        <td v-for="key in columns" :key="key.id" v-formatCellData="key">
+          {{ entry[key] }}
         </td>
-        <td>{{ ticker.price_usd | formatPrice }}</td>
-        <td v-plusMinusColor="ticker.percent_change_24h">{{ `${ticker.percent_change_24h}%` }}</td>
-        <td>{{ ticker.market_cap_usd | formatPrice }}</td>
-        <td>{{ ticker["24h_volume_usd"] | formatPrice }}</td>
-        <td>{{ ticker.total_supply | formatNumber }} {{ ticker.symbol }}</td>
       </tr>
     </tbody>
   </div>
 </template>
 
 <script>
+import _ from 'lodash';
+
 export default {
   name: "Table",
-  props: ["tickerData"]
+  props: ["data", "columns"],
+  data() {
+
+    var sortOrders = {};
+    
+    this.columns.forEach(element => {
+     sortOrders[element] = 1;
+    });
+
+    return {
+      sortKey: '',
+      sortOrders,
+      onStartSort: false
+    }
+  },
+  methods: {
+    sortBy(key) {
+      this.sortKey = key;
+      this.sortOrders[key] = this.sortOrders[key] * -1; 
+
+      this.onStartSort = !this.onStartSort;
+    }
+  },
+  computed: {
+    sortedData() {
+      var key = this.sortKey;
+      var data = this.data;
+      var order = this.sortOrders[key] || 1;
+
+      if (this.onStartSort) {
+          data = data.slice().sort((a, b) => {
+          
+          a = parseInt(a[key], 10)
+          b = parseInt(b[key], 10)
+
+          return (a === b ? 0 : a > b 
+                                    ? 1 : -1 ) * order
+
+        })
+      }
+
+      return data;
+    }
+  }
 }
+
 </script>
 
 <style scoped>

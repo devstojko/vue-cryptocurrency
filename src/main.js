@@ -11,19 +11,43 @@ import numeral from 'numeral';
 Vue.config.productionTip = false;
 
 // Filters
-
+Vue.filter('trimUnderscore', val => val.replace(/_/g, ' '));
+Vue.filter('capitalize', val => val[0].toUpperCase() + val.slice(1));
 Vue.filter('fromNow', val => moment.unix(val).fromNow());
 Vue.filter('formatPrice', val => numeral(val).format('$0,0'));
 Vue.filter('formatNumber', val => numeral(val).format('0,0'));
 Vue.filter('formatPercentage', val => val === undefined ? '0%' : `${val}%`);
 
-// Directives
-Vue.directive('plusMinusColor', {
+Vue.directive('formatCellData', {
   bind(el, binding, vnode) {
-    return binding.value >= 0
-      ? el.style.color = 'green'
-      : el.style.color = 'red';
-  }
+    const key = binding.value;
+
+    const format = {
+      'rank': 'default',
+      'name': 'default',
+      'price_usd': 'price',
+      'percent_change_24h': 'percentage',
+      'market_cap_usd': 'price',
+      '24h_volume_usd': 'price',
+      'available_supply': 'number',
+    };
+
+    const formaters = {
+      default: v => v,
+      price: v => numeral(v).format('$0,0'),
+      number: v => numeral(v).format('0,0'),
+      percentage: v => v === undefined ? '0%' : `${v}%`,
+     
+    };
+
+    if (key === 'percent_change_24h') {
+      el.style.color = parseInt(el.innerText, 10) > 0 ? 'green' : 'red'; 
+    }
+
+    if (key in format) {
+      el.innerText = formaters[format[key]](el.innerText);
+    }
+  },
 });
 
 /* eslint-disable no-new */
