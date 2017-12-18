@@ -41,7 +41,7 @@ Vue.directive('formatCellData', {
     };
 
     if (key === 'percent_change_24h') {
-      el.style.color = parseInt(el.innerText, 10) > 0 ? 'green' : 'red'; 
+      el.style.color = parseInt(el.innerText, 10) > 0 ? 'green' : 'red';
     }
 
     if (key in format) {

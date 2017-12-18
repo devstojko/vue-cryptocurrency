@@ -2,7 +2,7 @@
   <div class="table">
     <thead>
       <tr>
-        <th v-for="column in columns" :key="column.id" @click="sortBy(column)">
+        <th v-for="column in columns" :key="column.id" @click="sortBy(column)"  :class="sortOrders[column] > 0 ? 'asc' : 'dsc'">
           {{ column | capitalize | trimUnderscore }}
         </th>
       </tr>
@@ -81,6 +81,14 @@ export default {
   {
     padding: 5px;
     border: 1px solid black;
+  }
+
+  .table th.asc:after {
+    content: '↑'
+  }
+
+  .table th.dsc:after {
+    content: '↓'
   }
 
 </style>
