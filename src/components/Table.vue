@@ -34,7 +34,7 @@ export default {
     return {
       sortKey: '',
       sortOrders,
-      onStartSort: false
+      onClickSort: false
     }
   },
   methods: {
@@ -42,7 +42,7 @@ export default {
       this.sortKey = key;
       this.sortOrders[key] = this.sortOrders[key] * -1; 
 
-      this.onStartSort = !this.onStartSort;
+      this.onClickSort = !this.onClickSort;
     }
   },
   computed: {
@@ -51,7 +51,7 @@ export default {
       var data = this.data;
       var order = this.sortOrders[key] || 1;
 
-      if (this.onStartSort) {
+      if (this.onClickSort) {
           data = data.slice().sort((a, b) => {
           
           a = parseInt(a[key], 10)
