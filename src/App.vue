@@ -1,6 +1,7 @@
 <template>
   <div class="app">
-    <app-header :headerData="headerData"></app-header>
+    <app-header></app-header>
+    <app-search></app-search>
     <app-table :data="tickerData" :columns="tableColumns"></app-table>
   </div>
 </template>
@@ -8,12 +9,14 @@
 <script>
   import axios from 'axios';
   import Header from '@/components/Header';
+  import Search from '@/components/Search';
   import Table from '@/components/Table';
 
 export default {
   name: 'app',
   components: {
     'app-header': Header,
+    'app-search': Search,
     'app-table': Table
   },
   data() {
@@ -31,22 +34,8 @@ export default {
       ]
     }
   },
-  computed: {
-    getGlobalData() {
-      return axios.get('https://api.coinmarketcap.com/v1/global/');
-    },
-    getTickerList() {
-      return axios.get('https://api.coinmarketcap.com/v1/ticker/');
-    },
-
-  },
-  created() {
-    axios.all([this.getGlobalData, this.getTickerList]).then(axios.spread((global, ticker) => {
-     
-      this.headerData = global.data;
-      this.tickerData = ticker.data;
-
-    }))
+  mounted() {
+    this.$store.dispatch('LOAD_API_DATA')
   }
 };
 </script>
