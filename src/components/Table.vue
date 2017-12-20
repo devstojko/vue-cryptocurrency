@@ -4,7 +4,12 @@
     <table>
       <thead>
       <tr>
-        <th v-for="column in columns" :key="column.id">
+        <th 
+          v-for="column in columns"
+          :key="column.id"
+          @click="sortBy(column)"
+          :class="{active: sortByKey[column] !== 1 }"
+        >
           {{ column | capitalize | trimUnderscore }}  
         </th>
       </tr>
@@ -34,7 +39,8 @@ export default {
   computed: {
     ...mapState([
       'searchTerm',
-      'apiTableData'
+      'apiTableData',
+      'sortByKey'
     ]),
     ...mapGetters([
       'filteredData'
@@ -51,6 +57,11 @@ export default {
       ]
     },
   },
+  methods: {
+    sortBy(key) {
+      this.$store.commit('sortBy', key);
+    }
+  }
 
   // props: ["data", "columns"],
   // data() {
@@ -112,11 +123,22 @@ export default {
     border: 1px solid black;
   }
 
-  .table th.asc:after {
+  .table th {
+    cursor: pointer;
+    color: darkslategray;
+    transition: .3s ease;
+  }
+
+  .table th.active {
+    color: white;
+    background-color: lightslategray;
+  }
+
+  .table th:after {
     content: '↑'
   }
 
-  .table th.dsc:after {
+  .table th.active:after {
     content: '↓'
   }
 
