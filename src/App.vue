@@ -2,7 +2,7 @@
   <div class="app">
     <app-header></app-header>
     <app-search></app-search>
-    <app-table :data="tickerData" :columns="tableColumns"></app-table>
+    <app-table></app-table>
   </div>
 </template>
 

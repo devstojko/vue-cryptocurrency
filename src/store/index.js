@@ -4,6 +4,7 @@ import axios from 'axios';
 
 Vue.use(Vuex);
 
+
 export default new Vuex.Store({
   state: {
     searchTerm: '',
@@ -14,13 +15,12 @@ export default new Vuex.Store({
     LOAD_API_DATA({ commit }) {
       axios.all([
         axios.get('https://api.coinmarketcap.com/v1/global/'),
-        axios.get('https://api.coinmarketcap.com/v1/ticker/')
+        axios.get('https://api.coinmarketcap.com/v1/ticker/'),
       ]).then(axios.spread((headerData, tableData) => {
-   
         const data = {
           apiHeaderData: headerData.data,
           apiTableData: tableData.data,
-        }
+        };
 
         commit('SET_API_DATA', { data });
       })).catch(e => console.log(e));
@@ -35,9 +35,9 @@ export default new Vuex.Store({
       state.searchTerm = searchTerm;
     },
   },
-  getters: {
-    searchTableData: state => {
-      return state.apiTableData;
+  getters: { 
+    filteredData(state) {
+      return state.apiTableData.filter(prop => prop.name.toLowerCase().includes(state.searchTerm.toLowerCase()));
     },
   },
 });

@@ -1,46 +1,43 @@
 <template>
-  <div class="table">
-    <!-- <thead>
-      
-    </thead>
-    <tbody>
-      <tr v-for="entry in filteredData" :key="entry.id">
-        <td v-for="key in columns" :key="key.id" v-formatCellData="key">
-          {{ entry[key] }}
-        </td>
-      </tr>
-    </tbody> -->
-    <thead>
+  <div v-if="filteredData.length === 0">No search results</div>
+  <div class="table" v-else>
+    <table>
+      <thead>
       <tr>
         <th v-for="column in columns" :key="column.id">
-          {{ column | capitalize | trimUnderscore }}
+          {{ column | capitalize | trimUnderscore }}  
         </th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="entry in searchColumns" :key="entry.id">
-        <td v-for="key in columns" :key="key.id" v-formatCellData="key">
-          {{ entry[key] }}
-        </td>
+      <tr v-for="entry in filteredData" :key="entry.id">   
+        <template v-for="key in columns">
+          <td :key="key.id" v-formatCellData="{val: entry[key], key: key}"> 
+            <icon v-if="key === 'name' " :class="`s-s-${entry.id}`"></icon>
+            {{ entry[key] }}
+          </td>
+        </template>
       </tr>   
     </tbody>
+    </table>
   </div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex';
 import _ from 'lodash';
+import Icon from '@/components/Icon';
 
 export default {
   name: "Table",
- 
+  components: { 'icon': Icon },
   computed: {
     ...mapState([
       'searchTerm',
       'apiTableData'
     ]),
     ...mapGetters([
-      'searchTableData'
+      'filteredData'
     ]),
     columns() {
       return [
@@ -53,18 +50,7 @@ export default {
         "available_supply"
       ]
     },
-    searchColumns() {
-      var search = this.apiTableData;
- 
-      if (!search) {
-        return search
-      } else {
-        return search.filter(val => {
-          return val.name.toLowerCase().includes(this.searchTerm.toLowerCase())
-        })
-      }
-    }
-  }
+  },
 
   // props: ["data", "columns"],
   // data() {
@@ -121,8 +107,7 @@ export default {
     border-spacing: 0px;
     margin: 20px;
   }
-  .table, th, td
-  {
+  .table, th, td {
     padding: 5px;
     border: 1px solid black;
   }

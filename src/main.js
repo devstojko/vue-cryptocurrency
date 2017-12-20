@@ -20,7 +20,7 @@ Vue.filter('formatPercentage', val => val === undefined ? '0%' : `${val}%`);
 
 Vue.directive('formatCellData', {
   bind(el, binding, vnode) {
-    const key = binding.value;
+    const arg = binding.value;
 
     const format = {
       'rank': 'default',
@@ -40,12 +40,12 @@ Vue.directive('formatCellData', {
      
     };
 
-    if (key === 'percent_change_24h') {
-      el.style.color = parseInt(el.innerText, 10) > 0 ? 'green' : 'red';
+    if (arg.key === 'percent_change_24h') {
+      el.style.color = parseInt(arg.val, 10) > 0 ? 'green' : 'red';
     }
 
-    if (key in format) {
-      el.innerText = formaters[format[key]](el.innerText);
+    if (arg.key in format) {
+      el.innerHTML = formaters[format[arg.key]](el.innerHTML);
     }
   },
 });
